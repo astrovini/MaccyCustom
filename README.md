@@ -17,6 +17,10 @@ Maccy works on macOS Sonoma 14 or higher.
 > - **Shift+click** an item to add it to the selection
 > - **Shift+↑/↓** to extend the selection via keyboard
 > - Press **Enter** to paste all selected items joined by `\n`
+>
+> Install: `brew install --cask astrovini/tap/maccycustom`
+> (or download from [releases](https://github.com/astrovini/MaccyCustom/releases) — signed and notarized).
+> Maintainers: see [RELEASING.md](RELEASING.md).
 
 <!-- vim-markdown-toc GFM -->
 
