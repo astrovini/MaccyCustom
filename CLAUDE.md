@@ -16,7 +16,12 @@ Upstream sync: `git fetch origin && git rebase origin/master && git push --force
 
 ## Building and releasing
 
-- Local dev build: `xcodebuild -project Maccy.xcodeproj -scheme Maccy -configuration Release CODE_SIGN_IDENTITY="-" CODE_SIGNING_REQUIRED=YES build`
+- Local dev build + run: `./scripts/dev.sh` (builds, signs with the
+  Developer ID identity, launches from DerivedData). Do NOT launch the
+  raw xcodebuild output: the embedded Sparkle framework's Team ID
+  mismatch kills it at startup (dyld error), and ad-hoc re-signing makes
+  paste fail (see Gotchas). Quit and `open /Applications/Maccy.app` to
+  return to the brew-installed copy.
 - Distribution (signed + notarized + zipped): `./scripts/release.sh`, then
   follow [RELEASING.md](RELEASING.md) (GitHub release + bump the cask in
   ~/Documents/Projects/homebrew-tap). Users install via
@@ -27,9 +32,13 @@ Upstream sync: `git fetch origin && git rebase origin/master && git push --force
 - Do NOT reintroduce `SUFeedURL` in Maccy/Info.plist (e.g. during an
   upstream rebase): the upstream appcast would auto-update users back to
   official Maccy, silently removing the fork's features.
-- Ad-hoc dev builds invalidate the macOS Accessibility grant on every
-  rebuild (signature changes); paste then fails silently. Fix: remove and
-  re-add Maccy in System Settings → Privacy & Security → Accessibility.
+- macOS binds the Accessibility (paste) grant to bundle ID + code
+  signature. The grant on this machine belongs to the Developer ID
+  identity (team L228C8LS8X). Dev builds signed with the same identity
+  (what scripts/dev.sh does) inherit it; ad-hoc builds do not — paste
+  fails silently, and granting the ad-hoc build re-binds the entry and
+  breaks the brew build instead. If TCC gets wedged:
+  `tccutil reset Accessibility com.astrovini.maccy`, relaunch, re-grant.
 - The fork's core feature lives in `AppState.select()`
   (Maccy/Observables/AppState.swift) and `Maccy/Views/HistoryItemView.swift`
   (Shift+click). Upstream ships the same multi-select machinery behind a
