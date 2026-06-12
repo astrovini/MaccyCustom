@@ -22,8 +22,10 @@ brew install --cask astrovini/tap/maccycustom
 
 ## Release steps
 
-1. Bump `MARKETING_VERSION` in `Maccy.xcodeproj` (both Release and Debug
-   entries in project.pbxproj, e.g. `2.6.1` → `2.6.2`). Commit and push.
+1. Bump `MARKETING_VERSION` (e.g. `2.6.1` → `2.6.2`) AND
+   `CURRENT_PROJECT_VERSION` (e.g. `61` → `62`; Sparkle compares this
+   one, so it must increase every release) in `Maccy.xcodeproj` — both
+   appear twice in project.pbxproj. Commit and push.
 
 2. Build, sign, notarize, staple, and package:
 
@@ -44,7 +46,12 @@ brew install --cask astrovini/tap/maccycustom
 4. Update the cask in `~/Documents/Projects/homebrew-tap/Casks/maccycustom.rb`:
    set `version` and `sha256` to the new values, then commit and push.
 
-5. Verify like a user would:
+5. Commit and push the regenerated `appcast.xml` (release.sh rewrites it).
+   This powers the in-app "Check now"/automatic update checks via Sparkle;
+   it must be pushed only after the GitHub release exists, or in-app
+   updates will 404.
+
+6. Verify like a user would:
 
    ```sh
    brew upgrade maccycustom   # or: brew install --cask astrovini/tap/maccycustom
@@ -63,9 +70,12 @@ git push --force-with-lease
 ```
 
 Then release as above. Watch for upstream changes to `Maccy/Info.plist`
-(we removed `SUFeedURL` — Sparkle updates must stay disabled, otherwise the
-official appcast would replace this fork on users' machines) and to
-`AppState.select()` / `HistoryItemView` (our multi-select paste changes).
+and `appcast.xml`: `SUFeedURL` must keep pointing at
+`raw.githubusercontent.com/astrovini/MaccyCustom/master/appcast.xml` and
+the appcast must keep listing our releases — if a rebase restores
+upstream's values, Sparkle would update users back to official Maccy,
+silently removing the fork's features. Also watch `AppState.select()` /
+`HistoryItemView` (our multi-select paste changes).
 
 ## Fork changes vs upstream
 
@@ -77,7 +87,10 @@ official appcast would replace this fork on users' machines) and to
 - Bundle ID `com.astrovini.maccy` (app name remains Maccy; clipboard
   history in `~/Library/Application Support/Maccy` is keyed by name and
   is shared/kept across upstream-vs-fork switches).
-- Sparkle update feed removed; updates ship via `brew upgrade`.
+- Sparkle feed points at the fork's own appcast (validated via Apple
+  code signing — same Developer ID team — so no EdDSA keys needed);
+  automatic checks default to off. Primary update channel is
+  `brew upgrade`.
 
 ## Troubleshooting
 

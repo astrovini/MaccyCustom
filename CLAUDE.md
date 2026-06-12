@@ -29,9 +29,12 @@ Upstream sync: `git fetch origin && git rebase origin/master && git push --force
 
 ## Gotchas
 
-- Do NOT reintroduce `SUFeedURL` in Maccy/Info.plist (e.g. during an
-  upstream rebase): the upstream appcast would auto-update users back to
-  official Maccy, silently removing the fork's features.
+- `SUFeedURL` in Maccy/Info.plist and `appcast.xml` at the repo root must
+  always point at the FORK (astrovini/MaccyCustom), never upstream. If an
+  upstream rebase restores p0deje values, Sparkle would auto-update users
+  back to official Maccy, silently removing the fork's features.
+  release.sh regenerates appcast.xml each release; push it after the
+  GitHub release exists.
 - macOS binds the Accessibility (paste) grant to bundle ID + code
   signature. The grant on this machine belongs to the Developer ID
   identity (team L228C8LS8X). Dev builds signed with the same identity

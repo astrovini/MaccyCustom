@@ -18,7 +18,9 @@ OUT=dist
 
 VERSION=$(xcodebuild -project Maccy.xcodeproj -showBuildSettings -configuration Release 2>/dev/null \
   | awk '/MARKETING_VERSION/ { print $3; exit }')
-echo "==> Building Maccy $VERSION"
+BUILD=$(xcodebuild -project Maccy.xcodeproj -showBuildSettings -configuration Release 2>/dev/null \
+  | awk '/CURRENT_PROJECT_VERSION/ { print $3; exit }')
+echo "==> Building Maccy $VERSION ($BUILD)"
 
 rm -rf "$OUT"
 mkdir -p "$OUT"
@@ -66,6 +68,33 @@ xcrun stapler staple "$OUT/Maccy.app"
 # Re-zip so the published archive contains the stapled app
 rm "$ZIP"
 ditto -c -k --keepParent "$OUT/Maccy.app" "$ZIP"
+
+# Regenerate the Sparkle appcast (single latest item). Sparkle validates
+# updates via Apple code signing (same Developer ID team), so no EdDSA
+# signature is needed. Commit and push appcast.xml after publishing the
+# GitHub release, or in-app update checks will 404.
+echo "==> Writing appcast.xml"
+cat > appcast.xml <<APPCAST
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>MaccyCustom</title>
+    <link>https://github.com/astrovini/MaccyCustom</link>
+    <item>
+      <title>$VERSION</title>
+      <pubDate>$(date -R)</pubDate>
+      <sparkle:version>$BUILD</sparkle:version>
+      <sparkle:shortVersionString>$VERSION</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <link>https://github.com/astrovini/MaccyCustom/releases/tag/v$VERSION</link>
+      <enclosure
+        url="https://github.com/astrovini/MaccyCustom/releases/download/v$VERSION/Maccy-$VERSION.zip"
+        length="$(stat -f %z "$ZIP")"
+        type="application/octet-stream"/>
+    </item>
+  </channel>
+</rss>
+APPCAST
 
 echo "==> Done: $ZIP"
 shasum -a 256 "$ZIP"
