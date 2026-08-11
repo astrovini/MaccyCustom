@@ -105,9 +105,7 @@ silently removing the fork's features. Also watch `AppState.select()` /
   --keychain-profile maccy-notary` lists per-file errors. The script
   already handles the two we hit: Sparkle's nested binaries needing
   re-signing, and the `get-task-allow` entitlement from non-archive builds.
-- **Paste not working after install**: grant Accessibility. For local
-  ad-hoc dev builds (not brew installs), every rebuild changes the
-  signature and silently invalidates the existing grant — remove and
-  re-add BetterMaccy in System Settings → Privacy & Security → Accessibility.
-  Notarized brew builds keep a stable signature, so this only affects
-  dev builds.
+- **Paste not working after install**: grant Accessibility in System Settings →
+  Privacy & Security → Accessibility. Notarized brew builds keep a stable
+  signature, so the grant sticks. Local dev builds are a different story —
+  see [Accessibility and the paste grant](docs/DEVELOPMENT.md#accessibility-and-the-paste-grant).

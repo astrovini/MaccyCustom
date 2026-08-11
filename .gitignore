@@ -5,3 +5,5 @@ BetterMaccy.xcodeproj/project.xcworkspace/xcshareddata
 BetterMaccy/.DS_Store
 dist/
 *.p8
+CLAUDE.md
+.claude/

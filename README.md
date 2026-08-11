@@ -31,7 +31,7 @@ Install (signed & notarized):
 brew install --cask astrovini/tap/bettermaccy
 ```
 
-Or download from [Releases](https://github.com/astrovini/BetterMaccy/releases/latest). Maintainers: see [RELEASING.md](RELEASING.md).
+Or download from [Releases](https://github.com/astrovini/BetterMaccy/releases/latest). Building it yourself: see [docs/DEVELOPMENT.md](docs/DEVELOPMENT.md). Shipping a release: see [RELEASING.md](RELEASING.md).
 
 ---
 
