@@ -15,13 +15,19 @@ current setup. Requires macOS Sonoma 14 or higher.
 - **Multi-select paste** — pick several history items (**Shift+click**, or **Shift+↑/↓**
   from the keyboard) and press **Enter** to paste them all at once as one block, joined
   by newlines.
+- **Favorites** — mark the items you want to keep with **⌥⇧F**, and press **⌥F** to
+  switch the list between Recents and Favorites. Favorites ignore the history size limit
+  and survive **Clear**.
+- **A preview pane you can select text in** — press **⌥Space** to open it, then
+  highlight and copy just the part of an item you need (**⌘C**) instead of taking the
+  whole entry. It can stay pinned open while you move around the popup.
 - **`Option+V` default shortcut** with **"paste automatically" on by default** — hit
   Enter and it pastes straight into the app you were just in.
 - **"Select item with" mode** (Settings → General) — choose **Hover** (hover highlights,
   one click pastes) or **Click** (one click highlights, double click pastes) when
   hover-to-select feels too twitchy.
-- **No hover/scroll lag on huge items** — copying a massive log no longer stalls the
-  popup.
+- **No lag on huge items** — copying a massive log no longer stalls the popup, with the
+  preview pane open or closed.
 - **Coexists with official Maccy** — its own bundle id and clipboard history, a green app
   icon, and a downward-feather menu bar glyph, so the two never collide.
 
@@ -82,12 +88,13 @@ brew install --cask astrovini/tap/bettermaccy
 4. To choose the history item and paste, press <kbd>OPTION (⌥)</kbd> + <kbd>ENTER</kbd>, or <kbd>OPTION (⌥)</kbd> + <kbd>CLICK</kbd> the item, or use <kbd>OPTION (⌥)</kbd> + `n` shortcut.
 5. To choose the history item and paste without formatting, press <kbd>OPTION (⌥)</kbd> + <kbd>SHIFT (⇧)</kbd> + <kbd>ENTER</kbd>, or <kbd>OPTION (⌥)</kbd> + <kbd>SHIFT (⇧)</kbd> + <kbd>CLICK</kbd> the item, or use <kbd>OPTION (⌥)</kbd> + <kbd>SHIFT (⇧)</kbd> + `n` shortcut.
 6. To delete the history item, press <kbd>OPTION (⌥)</kbd> + <kbd>DELETE (⌫)</kbd>.
-7. To see the full text of the history item, wait a couple of seconds for tooltip.
+7. To see the full text of the history item, press <kbd>OPTION (⌥)</kbd> + <kbd>SPACE</kbd> to open the preview pane. You can select text in the preview and copy just that part with <kbd>COMMAND (⌘)</kbd> + <kbd>C</kbd>. (Hovering and waiting a couple of seconds for the tooltip still works too.)
 8. To pin the history item so that it remains on top of the list, press <kbd>OPTION (⌥)</kbd> + <kbd>P</kbd>. The item will be moved to the top with a random but permanent keyboard shortcut. To unpin it, press <kbd>OPTION (⌥)</kbd> + <kbd>P</kbd> again.
-9. To clear all unpinned items, select _Clear_ in the menu, or press <kbd>OPTION (⌥)</kbd> + <kbd>COMMAND (⌘)</kbd> + <kbd>DELETE (⌫)</kbd>. To clear all items including pinned, select _Clear_ in the menu with  <kbd>OPTION (⌥)</kbd> pressed, or press <kbd>SHIFT (⇧)</kbd> + <kbd>OPTION (⌥)</kbd> + <kbd>COMMAND (⌘)</kbd> + <kbd>DELETE (⌫)</kbd>.
-10. To disable BetterMaccy and ignore new copies, click on the menu icon with <kbd>OPTION (⌥)</kbd> pressed.
-11. To ignore only the next copy, click on the menu icon with <kbd>OPTION (⌥)</kbd> + <kbd>SHIFT (⇧)</kbd> pressed.
-12. To customize the behavior, check "Preferences…" window, or press <kbd>COMMAND (⌘)</kbd> + <kbd>,</kbd>.
+9. To mark the history item as a favorite, press <kbd>OPTION (⌥)</kbd> + <kbd>SHIFT (⇧)</kbd> + <kbd>F</kbd>, or click its star. Press <kbd>OPTION (⌥)</kbd> + <kbd>F</kbd> to switch the list between Recents and Favorites. Favorites are kept regardless of the history size limit and survive _Clear_.
+10. To clear all unpinned items, select _Clear_ in the menu, or press <kbd>OPTION (⌥)</kbd> + <kbd>COMMAND (⌘)</kbd> + <kbd>DELETE (⌫)</kbd>. To clear all items including pinned, select _Clear_ in the menu with  <kbd>OPTION (⌥)</kbd> pressed, or press <kbd>SHIFT (⇧)</kbd> + <kbd>OPTION (⌥)</kbd> + <kbd>COMMAND (⌘)</kbd> + <kbd>DELETE (⌫)</kbd>.
+11. To disable BetterMaccy and ignore new copies, click on the menu icon with <kbd>OPTION (⌥)</kbd> pressed.
+12. To ignore only the next copy, click on the menu icon with <kbd>OPTION (⌥)</kbd> + <kbd>SHIFT (⇧)</kbd> pressed.
+13. To customize the behavior, check "Preferences…" window, or press <kbd>COMMAND (⌘)</kbd> + <kbd>,</kbd>.
 
 ## Advanced
 
