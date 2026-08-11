@@ -50,12 +50,8 @@ struct PreviewItemView: View {
           }
         }
       } else {
-        ScrollView {
-          Text(item.text)
-            .font(.body)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .textSelection(.enabled)
-        }
+        PreviewTextView(text: item.text, itemID: item.id)
+          .frame(maxWidth: .infinity, maxHeight: .infinity)
       }
 
       Spacer(minLength: 0)

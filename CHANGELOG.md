@@ -1,8 +1,27 @@
 # Changelog
 
 Notable changes to BetterMaccy (a fork of [Maccy](https://github.com/p0deje/Maccy)).
-Some fixes here patch pre-existing upstream behavior, so watch for them being
-reverted on an upstream rebase.
+Some fixes here patch pre-existing upstream behavior. The fork has diverged far
+enough that staying rebasable on upstream is no longer a goal, so these are
+written as the right fix for this codebase rather than as minimal patches.
+
+## [2.8.4] — 2026-08-11
+
+### Fixed
+
+- **Severe lag when moving between large text items with the preview pane
+  open.** The 2.8.0 fix removed this cost only while the preview was *closed*;
+  with it open, hovering, arrow-keying or clicking past a large entry still
+  stalled the popup for roughly a fifth of a second per step. The preview
+  rendered its text as a SwiftUI `ScrollView { Text(…) }`, and a `ScrollView`
+  proposes an unbounded height to its content — so the text had to be
+  line-broken in full just to report how tall it was, a measurement that scales
+  quadratically with length. At the 10,000-character preview cap that was
+  ~193 ms, paid on every single selection change. The text pane is now backed by
+  an `NSTextView`, which takes the size it is offered instead of measuring the
+  whole string and lays out only the lines actually on screen: ~1.3 ms at the
+  same 10,000 characters, and flat beyond ~2,000. Selecting and copying preview
+  text works as before (`PreviewTextView.swift`, `PreviewItemView.swift`).
 
 ## [2.8.3] — 2026-06-24
 
