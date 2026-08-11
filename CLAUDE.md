@@ -15,6 +15,15 @@ official Maccy thanks to a distinct bundle ID and storage path.
 
 Upstream sync: `git fetch origin && git rebase origin/master && git push --force-with-lease`.
 
+**Divergence from upstream is accepted and no longer a constraint.** The fork
+has drifted far enough (full rebrand, reworked preview/navigation/selection)
+that staying rebasable on p0deje/Maccy is not a goal. Do not shape changes to
+minimize rebase conflicts, and do not preserve upstream implementations just
+because they're upstream's — fix things the right way for this codebase. The
+only upstream-related things still worth guarding are the coexistence values
+listed under Gotchas (bundle ID, storage path, pasteboard marker, feed URL),
+because reverting those breaks the side-by-side install.
+
 ## Building and releasing
 
 - Local dev build + run: `./scripts/dev.sh` (builds, signs with the
@@ -46,6 +55,33 @@ Accessibility grant, no launching the brew copy):
 - `BetterMaccy.xctestplan` skips most of `HistoryTests` (inherited from
   upstream). New HistoryTests methods still run because only the class-level
   skip was removed; the originally-listed methods stay individually skipped.
+- `ClipboardTests` fails on clean `master` (~6-10 failures, varying). Those
+  tests poll the REAL system pasteboard, so a running clipboard manager or any
+  copy activity on the machine breaks them. Verified against a clean checkout on
+  2026-08-11 — do not go hunting for a regression, and do not stash the working
+  tree to re-confirm it.
+
+### Running tests and the app: ask first
+
+Both `xcodebuild test` and `scripts/dev.sh` put a visible, long-lived
+BetterMaccy on the user's screen. Neither is a background chore — get explicit
+sign-off before running either, and say plainly when something is backgrounded.
+
+- **Always scope test runs with `-only-testing`.** A bare `xcodebuild test`
+  also runs `BetterMaccyUITests`, which is a multi-minute UI-driving phase that
+  launches its own `BetterMaccy.app` copies from DerivedData. Killing the runner
+  mid-phase orphans those instances (they reparent to launchd, PPID 1) and they
+  keep running until killed by hand. This happened on 2026-08-11 and left three
+  strays alongside the user's installed copy.
+- **Never background the full suite.** If a run is needed, run it in the
+  foreground so its lifetime is visible and it can't outlive the turn.
+- **Check for strays afterwards** with
+  `ps ax | grep MacOS/BetterMaccy`. Anything under `DerivedData/` with the
+  `enable-testing` argument is a test host, not the user's app; the user's copy
+  runs from `/Applications/BetterMaccy.app`.
+- **Never `git stash` the user's working tree** — not to get a clean baseline,
+  not for anything. Compare against `git show HEAD:<file>`, a scratchpad
+  worktree, or just ask.
 
 ## Gotchas
 
